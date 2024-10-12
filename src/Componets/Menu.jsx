@@ -122,7 +122,11 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">{item.name}</p>
+                      <p className="text-lg pl-2 ">
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
+                      </p>
                       <p className="text-sm font-light pl-2 capitalize">
                         {lang == "en" && item.category_en}
                         {lang == "ar" && item.category_ar}
@@ -201,9 +205,9 @@ const Menu = () => {
                             }}
                             className="py-4 btn w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
                           >
-                            {lang == "en" && 'Add To Baket'}
-                            {lang == "ar" && 'زد الی القائمە'}
-                            {lang == "kr" && 'زیادکردن بۆ لیست'}
+                            {lang == "en" && "Add To Baket"}
+                            {lang == "ar" && "زد الی القائمە"}
+                            {lang == "kr" && "زیادکردن بۆ لیست"}
                           </button>
                         </div>
                       </div>
@@ -227,7 +231,11 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">{item.name}</p>
+                      <p className="text-lg pl-2 ">
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
+                      </p>
                       <p className="text-sm font-light pl-2 capitalize">
                         {lang == "en" && item.category_en}
                         {lang == "ar" && item.category_ar}
