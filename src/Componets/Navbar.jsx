@@ -4,9 +4,12 @@ import English from "../Assets/en.png";
 import Arabic from "../Assets/ar.png";
 import Kurdish from "../Assets/kr.png";
 import Nav from '../Assets/nav.png';
+import { useContext } from "react";
+import { LanguageContext } from "../Context/LanguageContext";
 const Navbar = () => {
   const { itemsImage, loadingImage, errorImage } = readImage("profile/");
   const [navImageUrl, setNavImageUrl] = useState(null);
+  const { lang, setLanguage } = useContext(LanguageContext); // Destructure lang and setLanguage
   useEffect(() => {
     if (loadingImage) {
       console.log("Profile Image Loading...");
@@ -38,6 +41,9 @@ const Navbar = () => {
       <div className="dropdown !bg-transparent">
         <div
           tabIndex={0}
+          onClick={() => {
+            lang != "en" && setLanguage("en");
+          }}
           role="button"
           className="bg-white btn m-2 border-none "
         >
@@ -47,11 +53,19 @@ const Navbar = () => {
           tabIndex={0}
           className="dropdown-content menu  gap-1 bg-white/20 rounded-xl z-[1] w-full p-2 shadow mt-2"
         >
-          <div className="btn bg-white border-none">
-            <img src={Arabic} alt="UK Flag" className="w-8" />
+          <div
+            onClick={() => {
+              lang != "ar" && setLanguage("ar");
+            }}
+            className="btn bg-white border-none"
+          >
+            <img src={Arabic} alt="UAE Flag" className="w-8" />
           </div>
-          <div className="btn bg-white border-none">
-            <img src={Kurdish} alt="UK Flag" className="w-8" />
+          <div
+            onClick={() => {lang != "kr" && setLanguage("kr")}}
+            className="btn bg-white border-none"
+          >
+            <img src={Kurdish} alt="KR Flag" className="w-8" />
           </div>
         </div>
       </div>

@@ -1,0 +1,83 @@
+{
+  "items": {
+    "item1": {
+      "category": "burger",
+      "description": "am itema discounty bo danrawa.",
+      "discount": 10,
+      "id": "1",
+      "name": "Meat Burger",
+      "price": 3000
+    },
+    "item2": {
+      "category": "gas",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "2",
+      "name": "1 Gas Meat",
+      "price": 2750
+    },
+    "item3": {
+      "category": "burger",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "3",
+      "name": "Chiken Burger",
+      "price": 2500
+    },
+    "item4": {
+      "category": "burger",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "4",
+      "name": "Chesse Burger",
+      "price": 3500
+    },
+    "item5": {
+      "category": "burger",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "5",
+      "name": "Meat Cheese Burger + Egg",
+      "price": 3500
+    },
+    "item6": {
+      "category": "kitchen",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "6",
+      "name": "Chiken On Bryani",
+      "price": 3000
+    },
+    "item7": {
+      "category": "kitchen",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "7",
+      "name": "Meat On Bryani",
+      "price": 6000
+    },
+    "item8": {
+      "category": "pizza",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "8",
+      "name": "Small Pizza",
+      "price": 4000
+    },
+    "item9": {
+      "category": "pizza",
+      "description": "Lera zanyary darbaray xwardnaka",
+      "discount": "",
+      "id": "9",
+      "name": "Big Pizza",
+      "price": 8000
+    }
+  },
+  "profile": {
+    "discount_all": 0,
+    "events": {
+      "event1": "null"
+    },
+    "title": "Resturanat Name"
+  }
+}

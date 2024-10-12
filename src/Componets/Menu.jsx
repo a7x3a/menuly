@@ -4,9 +4,10 @@ import { readData, readImage } from "../DB/Firebase";
 import { CustomScroll } from "react-custom-scroll";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { MdFeaturedPlayList } from "react-icons/md";
-import { TbHelpCircleFilled } from "react-icons/tb";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import NoIcon from "../Assets/no-image.png";
+import {LanguageContext} from "../Context/LanguageContext";
+import { useContext } from "react";
 const Menu = () => {
   const { itemsImage, loadingImage, errorImage } = readImage("items/");
   const { items, loading, error } = readData();
@@ -15,10 +16,11 @@ const Menu = () => {
   const [basket, setBasket] = useState([]);
   const [categoriesSelected, setCategoriesSelected] = useState(null);
   const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
+  const { lang, setLanguage } = useContext(LanguageContext); // Destructure lang and setLanguage
   const setCategory = (item) => {
     if (item && item !== categoriesSelected) {
       const list = data.filter(
-        (i) => i.category.toLowerCase() === item.toLowerCase()
+        (i) => i.category_en.toLowerCase() === item.toLowerCase()
       );
       setCategoriesSelected(item);
       setCategoriesSelectedItems(list);
@@ -27,6 +29,7 @@ const Menu = () => {
       setCategoriesSelected(null);
     }
   };
+
   //create a id post with image uploader with the same name of the id of the post make the id
   //update&delete&write = auth
   //read = no auth + auth
@@ -64,9 +67,19 @@ const Menu = () => {
       });
       setData(mergedData);
     }
-  }, [items, itemsImage, loading, loadingImage, error, errorImage, basket]);
-  const categoriesSet = new Set(data.map((item) => item.category));
-  const categoriesArray = Array.from(categoriesSet);
+  }, [items, itemsImage, loading, loadingImage, error, errorImage, basket,lang]);
+  // Use the 'en' field as the key to ensure uniqueness.
+  const categoriesMap = new Map();
+  data.forEach((item) => {
+    if (!categoriesMap.has(item.category_en)) {
+      categoriesMap.set(item.category_en, {
+        en: item.category_en,
+        ar: item.category_ar,
+        kr: item.category_kr,
+      });
+    }
+  });
+  const categoriesArray = Array.from(categoriesMap.values());
   return (
     <div className="min-w-full min-h-[100dvh] h-fit flex flex-col gap-6 bg-orange-300 pb-16 px-16 pt-7">
       <div className="w-full  h-[120px] carousel space-x-4 py-5 px-2 ">
@@ -75,22 +88,24 @@ const Menu = () => {
             <div
               key={index}
               onClick={() => {
-                setCategory(item);
+                setCategory(item.en);
               }}
               className={`card ${
-                item == categoriesSelected && "opacity-30"
+                item.en == categoriesSelected && "opacity-30"
               } active:scale-90 bg-white carousel-item  p-5 rounded-[15px] transition-all duration-300 w-1/6 aspect-square `}
             >
               <div className="flex  gap-4 justify-center items-center h-full">
                 <p className="text-sm font-bold opacity-75 uppercase tracking-wider">
-                  {item}
+                  {lang == "en" && item.en}
+                  {lang == "ar" && item.ar}
+                  {lang == "kr" && item.kr}
                 </p>
               </div>
             </div>
           );
         })}
       </div>
-      <div className="w-full min-h-fit max-h-fit border-none grid md:grid-cols-4 sm:grid-cols-3 grid-cols-1   gap-5 ">
+      <div className="w-full min-h-fit max-h-fit border-none grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-5 ">
         {categoriesSelected
           ? categoriesSelectedItems.map((item) => {
               return (
@@ -107,9 +122,15 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">{item.name}</p>
+                      <p className="text-lg pl-2 ">
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
+                      </p>
                       <p className="text-sm font-light pl-2 capitalize">
-                        {item.category}
+                        {lang == "en" && item.category_en}
+                        {lang == "ar" && item.category_ar}
+                        {lang == "kr" && item.category_kr}
                       </p>
                       <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
                         <p className="span">{item.price} IQD</p>
@@ -120,7 +141,7 @@ const Menu = () => {
                     <CustomScroll
                       heightRelativeToParent="calc(80% - 40px)"
                       handleClass="m-5"
-                      className="sm:w-1/3 w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
+                      className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
                     >
                       <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
@@ -128,7 +149,9 @@ const Menu = () => {
                         </button>
                       </form>
                       <h3 className="font-light tracking-widest uppercase  text-2xl ">
-                        {item.name}
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
                       </h3>
                       <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full ">
                         <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
@@ -141,7 +164,9 @@ const Menu = () => {
                         <div className="pb-4 rounded-2xl p-1">
                           <span className="py-4 bg-orange-400 flex flex-wrap items-center  gap-3 text-white rounded-2xl px-5 mt-3">
                             <MdFeaturedPlayList size={25} />
-                            {item.description}
+                            {lang == "en" && item.description_en}
+                            {lang == "ar" && item.description_ar}
+                            {lang == "kr" && item.description_kr}
                           </span>
 
                           <span
@@ -180,7 +205,9 @@ const Menu = () => {
                             }}
                             className="py-4 btn w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
                           >
-                            Add To Basket
+                            {lang == "en" && 'Add To Baket'}
+                            {lang == "ar" && 'زد الی القائمە'}
+                            {lang == "kr" && 'زیادکردن بۆ لیست'}
                           </button>
                         </div>
                       </div>
@@ -204,9 +231,15 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">{item.name}</p>
+                      <p className="text-lg pl-2 ">
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
+                      </p>
                       <p className="text-sm font-light pl-2 capitalize">
-                        {item.category}
+                        {lang == "en" && item.category_en}
+                        {lang == "ar" && item.category_ar}
+                        {lang == "kr" && item.category_kr}
                       </p>
                       <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
                         <p className="span">{item.price} IQD</p>
@@ -217,7 +250,7 @@ const Menu = () => {
                     <CustomScroll
                       heightRelativeToParent="calc(80% - 40px)"
                       handleClass="m-5"
-                      className="sm:w-1/3 w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
+                      className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
                     >
                       <form method="dialog">
                         <button className="btn btn-sm btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
@@ -225,7 +258,9 @@ const Menu = () => {
                         </button>
                       </form>
                       <h3 className="font-light tracking-widest uppercase  text-2xl ">
-                        {item.name}
+                        {lang == "en" && item.name_en}
+                        {lang == "ar" && item.name_ar}
+                        {lang == "kr" && item.name_kr}
                       </h3>
                       <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full">
                         <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
@@ -238,7 +273,9 @@ const Menu = () => {
                         <div className="pb-4 rounded-2xl p-1">
                           <span className="py-4 bg-orange-400 flex flex-wrap items-center  gap-3 text-white rounded-2xl px-5 mt-3">
                             <MdFeaturedPlayList size={25} />
-                            {item.description}
+                            {lang == "en" && item.description_en}
+                            {lang == "ar" && item.description_ar}
+                            {lang == "kr" && item.description_kr}
                           </span>
                           <span
                             className={`${
@@ -276,7 +313,9 @@ const Menu = () => {
                             }}
                             className="py-4 btn w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
                           >
-                            Add To Basket
+                            {lang == "en" && "Add To Baket"}
+                            {lang == "ar" && "زد الی القائمە"}
+                            {lang == "kr" && "زیادکردن بۆ لیست"}
                           </button>
                         </div>
                       </div>

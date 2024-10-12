@@ -1,20 +1,23 @@
 import React, { createContext, useEffect, useState } from "react";
 
+// 1. Create LanguageContext
 export const LanguageContext = createContext();
-const ThemeContextProvider = (props) => {
+
+// 2. Rename the provider component to avoid naming conflict
+const LanguageContextProvider = (props) => {
   const [lang, setLang] = useState(() => {
-    //AR EN KR
-    //Only Handle Pressing the Languages
     const savedLang = localStorage.getItem("lang");
-    return savedLang ? JSON.parse(savedLang) : "en";//Deafult English
+    return savedLang ? JSON.parse(savedLang) : "en"; // Default to English
   });
+
   useEffect(() => {
     localStorage.setItem("lang", JSON.stringify(lang));
   }, [lang]);
+
   const setLanguage = (language) => {
-    localStorage.setItem("lang", JSON.stringify(language));
-    setLang(lang);
+    setLang(language); // Update the state with the new language
   };
+
   return (
     <LanguageContext.Provider value={{ lang, setLanguage }}>
       {props.children}
@@ -22,4 +25,5 @@ const ThemeContextProvider = (props) => {
   );
 };
 
-export default ThemeContextProvider;
+// 3. Export the provider component
+export default LanguageContextProvider;
