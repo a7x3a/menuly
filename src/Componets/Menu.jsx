@@ -122,18 +122,14 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">
-                        {lang == "en" && item.name_en}
-                        {lang == "ar" && item.name_ar}
-                        {lang == "kr" && item.name_kr}
-                      </p>
+                      <p className="text-lg pl-2 ">{item.name}</p>
                       <p className="text-sm font-light pl-2 capitalize">
                         {lang == "en" && item.category_en}
                         {lang == "ar" && item.category_ar}
                         {lang == "kr" && item.category_kr}
                       </p>
                       <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                        <p className="span">{item.price} IQD</p>
+                        <p className="span text-black/60">{item.price} IQD</p>
                       </div>
                     </div>
                   </div>
@@ -231,18 +227,14 @@ const Menu = () => {
                       />
                     </div>
                     <div className="flex flex-col justify-around p-4">
-                      <p className="text-lg pl-2 ">
-                        {lang == "en" && item.name_en}
-                        {lang == "ar" && item.name_ar}
-                        {lang == "kr" && item.name_kr}
-                      </p>
+                      <p className="text-lg pl-2 ">{item.name}</p>
                       <p className="text-sm font-light pl-2 capitalize">
                         {lang == "en" && item.category_en}
                         {lang == "ar" && item.category_ar}
                         {lang == "kr" && item.category_kr}
                       </p>
                       <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                        <p className="span">{item.price} IQD</p>
+                        <p className="span text-black/60">{item.price} IQD</p>
                       </div>
                     </div>
                   </div>
