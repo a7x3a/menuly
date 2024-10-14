@@ -9,7 +9,7 @@ import { LanguageContext } from "../Context/LanguageContext";
 const Navbar = () => {
   const { itemsImage, loadingImage, errorImage } = readImage("profile/");
   const [navImageUrl, setNavImageUrl] = useState(null);
-  const { lang, setLanguage } = useContext(LanguageContext); // Destructure lang and setLanguage
+  const { lang, setLanguage,loader } = useContext(LanguageContext); // Destructure lang and setLanguage
   useEffect(() => {
     if (loadingImage) {
       console.log("Profile Image Loading...");
@@ -26,12 +26,15 @@ const Navbar = () => {
       console.log("Error Image Profiler.");
     }
   }, [itemsImage]);
+  const setModes = (lang) =>{
+    setLanguage(lang);
+  }
   return (
     <div className="min-h-[90px] h-fit min-w-full font-popins bg-orange-400 flex justify-between  px-5 py-4 items-center gap-4 ">
       <div className="flex btn items-center h-fit justify-center btn-ghost  hover:bg-transparent active:!bg-orange-300 active:!text-white rounded-xl border-none p-3 ">
         <img className="object-contain px-1 w-16 " src={Nav} alt="Logo Image" />
         <span className="font-popins tracking-widest flex  flex-col text-white font-bold text-xl ">
-          <span className="text-2xl ">D A N Y A S</span>
+          <span className="text-2xl ">MENULY</span>
           <span className="text-xs text-amber-800">
             <span className="">FAST</span>FOOD
           </span>
@@ -42,7 +45,7 @@ const Navbar = () => {
         <div
           tabIndex={0}
           onClick={() => {
-            lang != "en" && setLanguage("en");
+            lang != "en" && setModes('en');
           }}
           role="button"
           className="bg-white btn m-2 border-none "
@@ -55,14 +58,14 @@ const Navbar = () => {
         >
           <div
             onClick={() => {
-              lang != "ar" && setLanguage("ar");
+              lang != "ar" && setModes("ar");
             }}
             className="btn bg-white border-none"
           >
             <img src={Arabic} alt="UAE Flag" className="w-8" />
           </div>
           <div
-            onClick={() => {lang != "kr" && setLanguage("kr")}}
+            onClick={() => {lang != "kr" && setModes("kr");}}
             className="btn bg-white border-none"
           >
             <img src={Kurdish} alt="KR Flag" className="w-8" />

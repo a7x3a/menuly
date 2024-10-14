@@ -8,8 +8,7 @@ export default {
         "ipad-air": "768px",
       },
       fontFamily: {
-        popins: ["Poppins", "sans-serif"],
-        ibm: ["IBM Plex Sans Arabic", "sans-serif"],
+        Noto: ["Noto Kufi Arabic", "sans-serif"],
       },
     },
   },

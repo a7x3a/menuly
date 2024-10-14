@@ -14,12 +14,18 @@ const LanguageContextProvider = (props) => {
     localStorage.setItem("lang", JSON.stringify(lang));
   }, [lang]);
 
+  const [loader, setLoader] = useState();
+
   const setLanguage = (language) => {
+    setLoader(true);
     setLang(language); // Update the state with the new language
+    setTimeout(() => {
+      setLoader(false); // Stop loader after 3 seconds
+    }, 1500);
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, setLanguage }}>
+    <LanguageContext.Provider value={{ lang, setLanguage, loader, setLoader }}>
       {props.children}
     </LanguageContext.Provider>
   );
