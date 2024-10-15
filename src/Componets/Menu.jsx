@@ -288,7 +288,7 @@ const Menu = () => {
                               ✕
                             </button>
                           </form>
-                          <h3 className="font-light text-transparent/60 tracking-widest uppercase  text-2xl ">
+                          <h3 className="font-semibold text-transparent/60 tracking-wider uppercase  text-2xl ">
                             {lang == "en" && item.name_en}
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
