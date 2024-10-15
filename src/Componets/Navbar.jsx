@@ -4,6 +4,7 @@ import English from "../Assets/en.png";
 import Arabic from "../Assets/ar.png";
 import Kurdish from "../Assets/kr.png";
 import Nav from '../Assets/nav.png';
+import TranslationIcon from "../Assets/language.png";
 import { useContext } from "react";
 import { LanguageContext } from "../Context/LanguageContext";
 const Navbar = () => {
@@ -44,18 +45,26 @@ const Navbar = () => {
       <div className="dropdown !bg-transparent">
         <div
           tabIndex={0}
-          onClick={() => {
-            lang != "en" && setModes('en');
-          }}
           role="button"
           className="bg-white btn m-2 border-none "
         >
-          <img src={English} alt="UK Flag" className="w-8" />
+          <img src={TranslationIcon} alt="UK Flag" className="w-10" />
         </div>
         <div
           tabIndex={0}
           className="dropdown-content menu  gap-1 bg-white/20 rounded-xl z-[1] w-full p-2 shadow mt-2"
         >
+          <div
+            tabIndex={0}
+            onClick={() => {
+              lang != "en" && setModes("en");
+            }}
+            role="button"
+            className="bg-white btn border-none "
+          >
+            <img src={English} alt="UK Flag" className="w-8" />
+          </div>
+
           <div
             onClick={() => {
               lang != "ar" && setModes("ar");
@@ -65,7 +74,9 @@ const Navbar = () => {
             <img src={Arabic} alt="UAE Flag" className="w-8" />
           </div>
           <div
-            onClick={() => {lang != "kr" && setModes("kr");}}
+            onClick={() => {
+              lang != "kr" && setModes("kr");
+            }}
             className="btn bg-white border-none"
           >
             <img src={Kurdish} alt="KR Flag" className="w-8" />

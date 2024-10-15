@@ -6,10 +6,10 @@ import { BiSolidDollarCircle } from "react-icons/bi";
 import { MdFeaturedPlayList } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import NoIcon from "../Assets/no-image.png";
-import {LanguageContext} from "../Context/LanguageContext";
+import { LanguageContext } from "../Context/LanguageContext";
 import { useContext } from "react";
-import { lineWobble } from 'ldrs'
-lineWobble.register()
+import { lineWobble } from "ldrs";
+lineWobble.register();
 const Menu = () => {
   const { itemsImage, loadingImage, errorImage } = readImage("items/");
   const { items, loading, error } = readData();
@@ -18,7 +18,7 @@ const Menu = () => {
   const [basket, setBasket] = useState([]);
   const [categoriesSelected, setCategoriesSelected] = useState(null);
   const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
-  const { lang, setLanguage } = useContext(LanguageContext); // Destructure lang and setLanguage
+  const { lang } = useContext(LanguageContext); // Destructure lang and setLanguage
   const setCategory = (item) => {
     if (item && item !== categoriesSelected) {
       const list = data.filter(
@@ -69,7 +69,16 @@ const Menu = () => {
       });
       setData(mergedData);
     }
-  }, [items, itemsImage, loading, loadingImage, error, errorImage, basket,lang]);
+  }, [
+    items,
+    itemsImage,
+    loading,
+    loadingImage,
+    error,
+    errorImage,
+    basket,
+    lang,
+  ]);
   // Use the 'en' field as the key to ensure uniqueness.
   const categoriesMap = new Map();
   data.forEach((item) => {
@@ -83,7 +92,7 @@ const Menu = () => {
   });
   const categoriesArray = Array.from(categoriesMap.values());
   return (
-    <div className="min-w-full min-h-[100dvh] h-fit flex flex-col gap-6 bg-orange-300 pb-16 px-16 pt-7">
+    <div className="min-w-full min-h-[100dvh] h-fit flex flex-col gap-6 text-black tracking-wider bg-orange-300 pb-16 px-16 pt-7">
       {loading ? (
         <div className="w-full h-fit flex justify-center items-center">
           <l-line-wobble
@@ -143,13 +152,13 @@ const Menu = () => {
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
                           </p>
-                          <p className="text-sm font-light pl-2 capitalize">
+                          <p className="text-sm  pl-3 py-1 text-transparent/40 font-light capitalize">
                             {lang == "en" && item.category_en}
                             {lang == "ar" && item.category_ar}
                             {lang == "kr" && item.category_kr}
                           </p>
                           <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                            <p className="span text-black/60">
+                            <p className="span text-transparent/70">
                               {item.price} IQD
                             </p>
                           </div>
@@ -166,7 +175,7 @@ const Menu = () => {
                               ✕
                             </button>
                           </form>
-                          <h3 className="font-light tracking-widest uppercase  text-2xl ">
+                          <h3 className="font-semibold text-transparent/60 tracking-wider uppercase text-2xl">
                             {lang == "en" && item.name_en}
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
@@ -221,7 +230,7 @@ const Menu = () => {
                                 onClick={() => {
                                   basket.push(item);
                                 }}
-                                className="py-4 btn w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
+                                className="py-4 btn w-full bg-green-400 border-none flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
                               >
                                 {lang == "en" && "Add To Baket"}
                                 {lang == "ar" && "زد الی القائمە"}
@@ -256,7 +265,7 @@ const Menu = () => {
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
                           </p>
-                          <p className="text-sm font-light pl-2 capitalize">
+                          <p className="text-sm text-transparent/40 font-light pl-2 capitalize">
                             {lang == "en" && item.category_en}
                             {lang == "ar" && item.category_ar}
                             {lang == "kr" && item.category_kr}
@@ -279,7 +288,7 @@ const Menu = () => {
                               ✕
                             </button>
                           </form>
-                          <h3 className="font-light tracking-widest uppercase  text-2xl ">
+                          <h3 className="font-light text-transparent/60 tracking-widest uppercase  text-2xl ">
                             {lang == "en" && item.name_en}
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
@@ -318,7 +327,7 @@ const Menu = () => {
                                   <p className="capitalize pt-3 text-center">
                                     {item.discount}% discount
                                   </p>
-                                  <span className="py-4 bg-green-500 text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
+                                  <span className="py-4 bg-green-500  text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
                                     <RiDiscountPercentFill size={25} />
                                     <span>
                                       {item.price -
@@ -333,7 +342,7 @@ const Menu = () => {
                                 onClick={() => {
                                   basket.push(item);
                                 }}
-                                className="py-4 btn w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
+                                className="py-4 btn border-none w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
                               >
                                 {lang == "en" && "Add To Baket"}
                                 {lang == "ar" && "زد الی القائمە"}
