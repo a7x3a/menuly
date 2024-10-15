@@ -265,7 +265,7 @@ const Menu = () => {
                             {lang == "ar" && item.name_ar}
                             {lang == "kr" && item.name_kr}
                           </p>
-                          <p className="text-sm text-transparent/40 font-light pl-2 py-1 capitalize">
+                          <p className="text-sm text-transparent/40 font-light pl-3 py-1 capitalize">
                             {lang == "en" && item.category_en}
                             {lang == "ar" && item.category_ar}
                             {lang == "kr" && item.category_kr}
