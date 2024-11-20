@@ -31,7 +31,7 @@ const Navbar = () => {
     setLanguage(lang);
   }
   return (
-    <div className="min-h-[90px] h-fit min-w-full font-popins bg-orange-400 flex justify-between  px-5 py-4 items-center gap-4 ">
+    <div className="min-h-[90px] h-fit min-w-full font-popins bg-orange-400 flex justify-between  px-5 py-4 items-center gap-4 !font-elmessiri ">
       <div className="flex btn items-center h-fit justify-center btn-ghost  hover:bg-transparent active:!bg-orange-300 active:!text-white rounded-xl border-none p-3 ">
         <img className="object-contain px-1 w-16 " src={Nav} alt="Logo Image" />
         <span className="font-popins tracking-widest flex  flex-col text-white font-bold text-xl ">

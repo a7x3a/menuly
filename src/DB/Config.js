@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase } from "firebase/database";
 import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
   authDomain: import.meta.env.VITE_AUTH_DOMAIN,
@@ -15,4 +16,5 @@ const app = initializeApp(firebaseConfig);
 // Get a reference to the database
 const database = getDatabase(app);
 const storage = getStorage(app);
-export { database, storage };
+const auth = getAuth(app)
+export { database, storage , auth };

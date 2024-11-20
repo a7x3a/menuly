@@ -15,7 +15,6 @@ const Menu = () => {
   const { items, loading, error } = readData();
   const [data, setData] = useState([]);
   const [fullError, setFullError] = useState(null);
-  const [basket, setBasket] = useState([]);
   const [categoriesSelected, setCategoriesSelected] = useState(null);
   const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
   const { lang } = useContext(LanguageContext); // Destructure lang and setLanguage
@@ -32,22 +31,18 @@ const Menu = () => {
     }
   };
 
-  //create a id post with image uploader with the same name of the id of the post make the id
-  //update&delete&write = auth
-  //read = no auth + auth
-  //if error happen display fulll error and no working menu.
   useEffect(() => {
     if (loading || loadingImage) {
       console.log("Loading..."); // Handle loading state
       return;
     }
     if (error) {
-      console.log("Error loading data:", error); // Handle data loading error
+      console.error("Error loading data:", error); // Handle data loading error
       setFullError("Something wrong happens!");
       return;
     }
     if (errorImage) {
-      console.log("Error loading images:", errorImage); // Handle image loading error
+      console.error("Error loading images:", errorImage); // Handle image loading error
       setFullError("Something wrong happens!");
       return;
     }
@@ -67,18 +62,10 @@ const Menu = () => {
           imageUrl: correspondingImage ? correspondingImage.url : null,
         };
       });
+      console.log(mergedData)
       setData(mergedData);
     }
-  }, [
-    items,
-    itemsImage,
-    loading,
-    loadingImage,
-    error,
-    errorImage,
-    basket,
-    lang,
-  ]);
+  }, [items, itemsImage, loading, loadingImage, error, errorImage, lang]);
   // Use the 'en' field as the key to ensure uniqueness.
   const categoriesMap = new Map();
   data.forEach((item) => {
@@ -92,7 +79,7 @@ const Menu = () => {
   });
   const categoriesArray = Array.from(categoriesMap.values());
   return (
-    <div className="min-w-full min-h-[100dvh] h-fit flex flex-col gap-6 text-black tracking-wider bg-orange-300 pb-16 px-16 pt-7">
+    <div className="min-w-full relative min-h-[100dvh] h-fit flex flex-col gap-6 text-black tracking-wider bg-orange-300 pb-16 px-16 pt-7">
       {loading ? (
         <div className="w-full h-fit flex justify-center items-center">
           <l-line-wobble
@@ -142,7 +129,7 @@ const Menu = () => {
                         <div className="w-full h-full rounded-t-3xl overflow-hidden">
                           <img
                             className="object-cover object-center h-full w-full"
-                            src={NoIcon}
+                            src={item.imageUrl}
                             alt="Item Image"
                           />
                         </div>
@@ -158,9 +145,28 @@ const Menu = () => {
                             {lang == "kr" && item.category_kr}
                           </p>
                           <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                            <p className="span text-transparent/70">
-                              {item.price} IQD
-                            </p>
+                            {item.discount ? (
+                              <div className="flex items-center gap-1 p-1 h-full text-transparent/70 ">
+                                <RiDiscountPercentFill size={22} />
+                                <span className="mr-2 line-through">
+                                  {item.price}
+                                  <span className="text-transparent/40">
+                                    IQD
+                                  </span>
+                                </span>
+                                <span>
+                                  {item.price -
+                                    item.price * (item.discount / 100)}
+                                  <span className="text-transparent/40">
+                                    IQD
+                                  </span>
+                                </span>
+                              </div>
+                            ) : (
+                              <p className="text-transparent/70">
+                                {item.price} IQD
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -183,7 +189,7 @@ const Menu = () => {
                           <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full ">
                             <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
                               <img
-                                src={NoIcon}
+                                src={item.imageUrl}
                                 alt="Item Image"
                                 className="object-cover"
                               />
@@ -213,7 +219,9 @@ const Menu = () => {
                               {item.discount && (
                                 <>
                                   <p className="capitalize pt-3 text-center">
-                                    {item.discount}% discount
+                                    {item.discount}%{lang == "en" && "discount"}
+                                    {lang == "ar" && "خصم"}
+                                    {lang == "kr" && "داشکاندن"}
                                   </p>
                                   <span className="py-4 bg-green-500 text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
                                     <RiDiscountPercentFill size={25} />
@@ -225,17 +233,6 @@ const Menu = () => {
                                   </span>
                                 </>
                               )}
-
-                              <button
-                                onClick={() => {
-                                  basket.push(item);
-                                }}
-                                className="py-4 btn w-full bg-green-400 border-none flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
-                              >
-                                {lang == "en" && "Add To Baket"}
-                                {lang == "ar" && "زد الی القائمە"}
-                                {lang == "kr" && "زیادکردن بۆ لیست"}
-                              </button>
                             </div>
                           </div>
                         </CustomScroll>
@@ -255,7 +252,7 @@ const Menu = () => {
                         <div className="w-full h-full rounded-t-3xl overflow-hidden">
                           <img
                             className="object-cover object-center h-full w-full"
-                            src={NoIcon}
+                            src={item.imageUrl}
                             alt="Item Image"
                           />
                         </div>
@@ -271,9 +268,28 @@ const Menu = () => {
                             {lang == "kr" && item.category_kr}
                           </p>
                           <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                            <p className="span text-black/60">
-                              {item.price} IQD
-                            </p>
+                            {item.discount ? (
+                              <div className="flex items-center gap-1 p-1 h-full text-transparent/70 ">
+                                <RiDiscountPercentFill size={22} />
+                                <span className="mr-2 line-through">
+                                  {item.price}
+                                  <span className="text-transparent/40">
+                                    IQD
+                                  </span>
+                                </span>
+                                <span>
+                                  {item.price -
+                                    item.price * (item.discount / 100)}
+                                  <span className="text-transparent/40">
+                                    IQD
+                                  </span>
+                                </span>
+                              </div>
+                            ) : (
+                              <p className="text-transparent/70">
+                                {item.price} IQD
+                              </p>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -296,7 +312,7 @@ const Menu = () => {
                           <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full">
                             <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
                               <img
-                                src={NoIcon}
+                                src={item.imageUrl}
                                 alt="Item Image"
                                 className="object-cover"
                               />
@@ -325,7 +341,9 @@ const Menu = () => {
                               {item.discount && (
                                 <>
                                   <p className="capitalize pt-3 text-center">
-                                    {item.discount}% discount
+                                    {item.discount}%{lang == "en" && "discount"}
+                                    {lang == "ar" && "خصم"}
+                                    {lang == "kr" && "داشکاندن"}
                                   </p>
                                   <span className="py-4 bg-green-500  text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
                                     <RiDiscountPercentFill size={25} />
@@ -337,17 +355,6 @@ const Menu = () => {
                                   </span>
                                 </>
                               )}
-
-                              <button
-                                onClick={() => {
-                                  basket.push(item);
-                                }}
-                                className="py-4 btn border-none w-full bg-green-400 flex items-center justify-center gap-3 text-white rounded-2xl px-5 mt-3"
-                              >
-                                {lang == "en" && "Add To Baket"}
-                                {lang == "ar" && "زد الی القائمە"}
-                                {lang == "kr" && "زیادکردن بۆ لیست"}
-                              </button>
                             </div>
                           </div>
                         </CustomScroll>

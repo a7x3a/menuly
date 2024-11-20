@@ -8,8 +8,9 @@ export default {
         "ipad-air": "768px",
       },
       fontFamily: {
-        Noto: ["Noto Kufi Arabic", "sans-serif"],
-      },
+        elmessiri: ["El Messiri", "sans-serif"],
+        nrt: ["NRT-Reg", "sans-serif"],
+      },      
     },
   },
   plugins: [require("daisyui")],
