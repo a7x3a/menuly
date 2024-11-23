@@ -16,5 +16,5 @@ const app = initializeApp(firebaseConfig);
 // Get a reference to the database
 const database = getDatabase(app);
 const storage = getStorage(app);
-const auth = getAuth(app)
-export { database, storage , auth };
+const auth = getAuth(app);
+export { database, storage, auth };

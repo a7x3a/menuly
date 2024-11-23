@@ -5,7 +5,7 @@ import { CustomScroll } from "react-custom-scroll";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { MdFeaturedPlayList } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
-import NoIcon from "../Assets/no-image.png";
+import NoIcon from "../Assets/no-image.jpg";
 import { LanguageContext } from "../Context/LanguageContext";
 import { useContext } from "react";
 import { lineWobble } from "ldrs";
