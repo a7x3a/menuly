@@ -22,6 +22,7 @@ function AddItemModal() {
     description_ar: "",
     description_kr: "",
     price: "",
+    discount:"",
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -52,13 +53,11 @@ function AddItemModal() {
     setLoading(true);
 
     try {
-      const itemId = uuidv4();
+      const itemId = Date.now();
 
       // Upload image to Firebase Storage
       const storageRef = ref(storage, `items/${itemId}`);
       await uploadBytes(storageRef, imageFile);
-
-      const imageUrl = await getDownloadURL(storageRef);
 
       // Reference Firestore collection
       const itemCollectionRef = RefDB(database, `items/${itemId}`);
@@ -77,13 +76,8 @@ function AddItemModal() {
         description_kr: formData.description_kr,
         price: Number(formData.price),
         discount: Number(formData.discount || 0),
-        imageUrl: imageUrl,
       });
-
-      alert("Item added successfully!");
-      setFormData({
-        /* reset form fields */
-      });
+      setFormData({});
       setImageFile(null);
       document.getElementById("addModal").close();
     } catch (error) {
@@ -278,9 +272,23 @@ function AddItemModal() {
             onChange={handleInputChange}
             required
             min="0"
-            step="0.01"
+            step="1"
           />
 
+          <input
+            type="number"
+            name="discount"
+            
+            placeholder={
+              lang === "en" ? "Discount" : lang === "ar" ? "خصم" : "داشکاندن"
+            }
+            className="input input-bordered w-full"
+            value={formData.discount}
+            onChange={handleInputChange}
+            required
+            min="0"
+            step="1"
+          />
           {/* Modal Actions */}
           <div className="modal-action">
             <button

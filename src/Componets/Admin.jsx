@@ -203,7 +203,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                 {lang == "kr" && item.category_kr}
                               </p>
                               <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                                {item.discount ? (
+                                {item?.discount > 0 ? (
                                   <div className="flex items-center gap-1 p-1 h-full text-transparent/70 ">
                                     <RiDiscountPercentFill size={22} />
                                     <span className="mr-2 line-through">
@@ -266,7 +266,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                     }  py-4 bg-orange-400 text-white rounded-2xl px-5 mt-3 flex justify-between items-center `}
                                   >
                                     <BiSolidDollarCircle size={25} />
-                                    {item.discount ? (
+                                    {item?.discount > 0 ? (
                                       <span className="line-through">
                                         {item.price} IQD
                                       </span>
@@ -274,7 +274,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                       item.price + " IQD"
                                     )}
                                   </span>
-                                  {item.discount && (
+                                  {item?.discount > 0 && (
                                     <>
                                       <p className="capitalize pt-3 text-center">
                                         {item.discount}%
@@ -327,7 +327,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                 {lang == "kr" && item.category_kr}
                               </p>
                               <div className="bg-[#e3fff9] py-3 px-4 opacity-90 rounded-2xl mt-3 w-full flex justify-start items-center text-sm">
-                                {item.discount ? (
+                                {item?.discount > 0 ? (
                                   <div className="flex items-center gap-1 p-1 h-full text-transparent/70 ">
                                     <RiDiscountPercentFill size={22} />
                                     <span className="mr-2 line-through">
@@ -389,7 +389,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                     }  py-4 bg-orange-400 text-white rounded-2xl px-5 mt-3 flex justify-between items-center `}
                                   >
                                     <BiSolidDollarCircle size={25} />
-                                    {item.discount ? (
+                                    {item?.discount > 0 ? (
                                       <span className="line-through">
                                         {item.price} IQD
                                       </span>
@@ -397,7 +397,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                                       item.price + " IQD"
                                     )}
                                   </span>
-                                  {item.discount && (
+                                  {item?.discount > 0 && (
                                     <>
                                       <p className="capitalize pt-3 text-center">
                                         {item.discount}%
