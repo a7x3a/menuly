@@ -1,14 +1,13 @@
 // readData.js
 import { ref ,  get } from "firebase/database";
 import { database } from "./Config";
-import { useState, useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { useState, useEffect ,useContext } from "react";
 import { ref as refStore, listAll, getDownloadURL } from "firebase/storage";
 import { storage } from "./Config";
-
+import { ItemsContext } from "../Context/ItemsContext";
 // Function to read data from a specific path
 export const readData = (path) => {
-  const [items, setItems] = useState(null);
+  const {setData} = useContext(ItemsContext)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -18,12 +17,14 @@ export const readData = (path) => {
         const dbRef = ref(database, path);
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
-          setItems(Object.values(snapshot.val()));
+          const itemsObjects = Object.values(snapshot.val());
+          setData(itemsObjects)
         } else {
-          setItems(null); // or handle no data case
+          setData(null); // or handle no data case
         }
       } catch (err) {
         setError(err);
+        //we can do diconneted pop up here with Context
       } finally {
         setLoading(false);
       }
@@ -32,7 +33,7 @@ export const readData = (path) => {
     fetchData();
   }, [path]);
 
-  return { items, loading, error };
+  return { loading, error };
 };
 
 // Fnction to write data to a specific path

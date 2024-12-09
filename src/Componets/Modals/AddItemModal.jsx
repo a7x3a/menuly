@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { database, storage } from "../DB/Config";
+import { database, storage } from "../../DB/Config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ref as RefDB, set } from "firebase/database";
 import { IoMdAddCircle } from "react-icons/io";
 import { useContext } from "react";
-import { CustomScroll } from "react-custom-scroll";
-import { LanguageContext } from "../Context/LanguageContext";
-import NoIcon from "../Assets/no-image.jpg";
+import { LanguageContext } from "../../Context/LanguageContext";
+import { ItemsContext } from "../../Context/ItemsContext";
+import { RiDiscountPercentFill } from "react-icons/ri";
+import { BiSolidDollarCircle } from "react-icons/bi";
 
 function AddItemModal() {
   const { lang } = useContext(LanguageContext);
+  const { data, setData } = useContext(ItemsContext);
   const [formData, setFormData] = useState({
     name_en: "",
     name_ar: "",
@@ -22,7 +24,8 @@ function AddItemModal() {
     description_ar: "",
     description_kr: "",
     price: "",
-    discount:"",
+    discount: "",
+    imageUrl: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,26 +45,23 @@ function AddItemModal() {
   };
 
   const handleSubmit = async (e) => {
-    console.log(formData)
     e.preventDefault();
-
-    if (!imageFile) {
-      alert("Please upload an image!");
-      return;
-    }
-
     setLoading(true);
-
     try {
-      const itemId = Date.now();
-
-      // Upload image to Firebase Storage
-      const storageRef = ref(storage, `items/${itemId}`);
-      await uploadBytes(storageRef, imageFile);
-
+      const itemId = uuidv4();
+      let imageUrl = '';
+      if (imageFile) {
+        // Upload the provided image to Firebase Storage
+        const storageRef = ref(storage, `items/${itemId}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      } else {
+        // Set the default image URL if no image is uploaded
+        const defaultImageRef = ref(storage, "items/no-image.jpg");
+        imageUrl = await getDownloadURL(defaultImageRef);
+      }
       // Reference Firestore collection
       const itemCollectionRef = RefDB(database, `items/${itemId}`);
-
       // Add document to Firestore
       await set(itemCollectionRef, {
         id: itemId,
@@ -76,9 +76,26 @@ function AddItemModal() {
         description_kr: formData.description_kr,
         price: Number(formData.price),
         discount: Number(formData.discount || 0),
+        imageUrl: imageUrl,
       });
-      setFormData({});
+      setFormData({
+        name_en: "",
+        name_ar: "",
+        name_kr: "",
+        category_en: "",
+        category_ar: "",
+        category_kr: "",
+        description_en: "",
+        description_ar: "",
+        description_kr: "",
+        price: "",
+        discount: "",
+        imageUrl: "",
+      });
+
       setImageFile(null);
+      const newItem = { id: itemId, imageUrl: imageUrl, ...formData };
+      setData([...data, newItem]);
       document.getElementById("addModal").close();
     } catch (error) {
       console.error("Error adding item:", error);
@@ -87,7 +104,6 @@ function AddItemModal() {
       setLoading(false);
     }
   };
-
 
   return (
     <div>
@@ -107,15 +123,16 @@ function AddItemModal() {
       >
         <form onSubmit={handleSubmit} className="modal-box grid gap-5">
           <h3 className="text-lg font-bold">Add New Item</h3>
-
           {/* Image Upload */}
-          <label className="block text-sm font-medium">Upload Image</label>
+          <label className="block text-sm font-medium">
+            Upload The Item Image
+          </label>
           <input
             type="file"
             accept="image/*"
+            value={formData.imageUrl || ''}
             onChange={handleImageUpload}
             className="file-input file-input-bordered w-full"
-            required
           />
           {imageFile && (
             <img
@@ -124,7 +141,6 @@ function AddItemModal() {
               className="w-full h-40 object-cover rounded-lg"
             />
           )}
-
           {/* Input Fields */}
           <input
             type="text"
@@ -137,7 +153,7 @@ function AddItemModal() {
                 : "ناوی بە ئینگلیزی"
             }
             className="input input-bordered w-full"
-            value={formData.name_en}
+            value={formData.name_en || ''}
             onChange={handleInputChange}
             required
           />
@@ -152,7 +168,7 @@ function AddItemModal() {
                 : "ناوی بە عەرەبی"
             }
             className="input input-bordered w-full"
-            value={formData.name_ar}
+            value={formData.name_ar || ''}
             onChange={handleInputChange}
             required
           />
@@ -167,7 +183,7 @@ function AddItemModal() {
                 : "ناوی بە کوردی"
             }
             className="input input-bordered w-full"
-            value={formData.name_kr}
+            value={formData.name_kr || ''}
             onChange={handleInputChange}
             required
           />
@@ -182,7 +198,7 @@ function AddItemModal() {
                 : "هاوپۆلەکان بە ئینگلیزی"
             }
             className="input input-bordered w-full"
-            value={formData.category_en}
+            value={formData.category_en || ''}
             onChange={handleInputChange}
             required
           />
@@ -197,7 +213,7 @@ function AddItemModal() {
                 : "هاوپۆلەکان بە عەرەبی"
             }
             className="input input-bordered w-full"
-            value={formData.category_ar}
+            value={formData.category_ar || ''}
             onChange={handleInputChange}
             required
           />
@@ -212,7 +228,7 @@ function AddItemModal() {
                 : "هاوپۆلەکان بە کوردی"
             }
             className="input input-bordered w-full"
-            value={formData.category_kr}
+            value={formData.category_kr || ''}
             onChange={handleInputChange}
             required
           />
@@ -227,7 +243,7 @@ function AddItemModal() {
                 : "وەسف بە ئینگلیزی"
             }
             className="input input-bordered w-full"
-            value={formData.description_en}
+            value={formData.description_en || ''}
             onChange={handleInputChange}
             required
           />
@@ -242,7 +258,7 @@ function AddItemModal() {
                 : "وەسف بە عەرەبی"
             }
             className="input input-bordered w-full"
-            value={formData.description_ar}
+            value={formData.description_ar || ''}
             onChange={handleInputChange}
             required
           />
@@ -257,38 +273,63 @@ function AddItemModal() {
                 : "وەسف بە کوردی"
             }
             className="input input-bordered w-full"
-            value={formData.description_kr}
+            value={formData.description_kr || ''}
             onChange={handleInputChange}
             required
           />
-          <input
-            type="number"
-            name="price"
-            placeholder={
-              lang === "en" ? "Price" : lang === "ar" ? "السعر" : "نرخ"
-            }
-            className="input input-bordered w-full"
-            value={formData.price}
-            onChange={handleInputChange}
-            required
-            min="0"
-            step="1"
-          />
-
-          <input
-            type="number"
-            name="discount"
-            
-            placeholder={
-              lang === "en" ? "Discount" : lang === "ar" ? "خصم" : "داشکاندن"
-            }
-            className="input input-bordered w-full"
-            value={formData.discount}
-            onChange={handleInputChange}
-            required
-            min="0"
-            step="1"
-          />
+          <label htmlFor="price" className="flex justify-end items-center">
+            <input
+              type="number"
+              name="price"
+              placeholder={
+                lang === "en" ? "Price" : lang === "ar" ? "السعر" : "نرخ"
+              }
+              className="input input-bordered w-full steps-none"
+              value={formData.price || ''}
+              onChange={handleInputChange}
+              onInput={(e) => {
+                const value = e.target.value;
+                if (value < 0) {
+                  e.target.value = "";
+                }
+                if (value.startsWith("0") && value.length > 1) {
+                  e.target.value = value.slice(1);
+                }
+              }}
+              required
+              min="0"
+              step="1"
+            />
+            <BiSolidDollarCircle className="absolute mr-4" size={24} />
+          </label>
+          <label
+            htmlFor="discount"
+            className="relative flex justify-end items-center"
+          >
+            <input
+              type="number"
+              name="discount"
+              placeholder={
+                lang === "en" ? "Discount" : lang === "ar" ? "خصم" : "داشکاندن"
+              }
+              className="input input-bordered w-full"
+              value={formData.discount || ''}
+              onChange={handleInputChange}
+              required
+              onInput={(e) => {
+                const value = e.target.value;
+                if (value < 0) {
+                  e.target.value = "";
+                }
+                if (value.startsWith("0") && value.length > 1) {
+                  e.target.value = value.slice(1);
+                }
+              }}
+              min="0"
+              step="1"
+            />
+            <RiDiscountPercentFill className="absolute mr-4" size={24} />
+          </label>
           {/* Modal Actions */}
           <div className="modal-action">
             <button
@@ -313,4 +354,3 @@ function AddItemModal() {
 }
 
 export default AddItemModal;
-

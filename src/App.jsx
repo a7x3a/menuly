@@ -7,35 +7,38 @@ import Login from "./Componets/Login";
 import LanguageContextProvider from "./Context/LanguageContext";
 import ProtectedRoute from "./Routes/ProtectedRoute";
 import PublicRoute from "./Routes/PublicRoute";
+import { ItemsProvider } from "./Context/ItemsContext";
 const App = () => {
   return (
-    <LanguageContextProvider>
-      <div className="min-w-full h-fit">
-        <Router>
-          <RootLayout>
-            <Routes>
-              <Route path="/" element={<Menu />} />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute>
-                    <Admin />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <Login />
-                  </PublicRoute>
-                }
-              />
-            </Routes>
-          </RootLayout>
-        </Router>
-      </div>
-    </LanguageContextProvider>
+    <ItemsProvider>
+      <LanguageContextProvider>
+        <div className="min-w-full h-fit">
+          <Router>
+            <RootLayout>
+              <Routes>
+                <Route path="/" element={<Menu />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute>
+                      <Admin />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute>
+                      <Login />
+                    </PublicRoute>
+                  }
+                />
+              </Routes>
+            </RootLayout>
+          </Router>
+        </div>
+      </LanguageContextProvider>
+    </ItemsProvider>
   );
 };
 

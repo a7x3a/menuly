@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { auth } from "../DB/Config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -9,15 +9,13 @@ import { CustomScroll } from "react-custom-scroll";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { MdFeaturedPlayList } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
-import NoIcon from "../Assets/no-image.jpg";
 import { LanguageContext } from "../Context/LanguageContext";
-import { useContext } from "react";
-import AddItemModal from "./AddItemModal";
+import { ItemsContext } from "../Context/ItemsContext";
+import AddItemModal from "./Modals/AddItemModal";
 const Admin = () => {
 //Menu JSX
-const { itemsImage, loadingImage, errorImage } = readImage("items/");
-const { items, loading, error } = readData();
-const [data, setData] = useState([]);
+const { loading, error } = readData("/items");
+const { data, setData } = useContext(ItemsContext);
 const [fullError, setFullError] = useState(null);
 const [categoriesSelected, setCategoriesSelected] = useState(null);
 const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
@@ -35,42 +33,23 @@ const setCategory = (item) => {
   }
 };
 
-useEffect(() => {
-  if (loading || loadingImage) {
-    return;
-  }
-  if (error) {
-    console.error("Error loading data:", error); // Handle data loading error
-    setFullError("Something wrong happens!");
-    return;
-  }
-  if (errorImage) {
-    console.error("Error loading images:", errorImage); // Handle image loading error
-    setFullError("Something wrong happens!");
-    return;
-  }
-  if (items && itemsImage) {
-    const [itemsObject] = items;
-    const flattenedData = Object.values(itemsObject);
-    const mergedData = flattenedData.map((item) => {
-      const correspondingImage = itemsImage.find((image) => {
-        const imageNameWithoutExtension = image.name
-          .split(".")
-          .slice(0, -1)
-          .join(".");
-        return imageNameWithoutExtension === item.id;
-      });
-      return {
-        ...item,
-        imageUrl: correspondingImage ? correspondingImage.url : null,
-      };
-    });
-    setData(mergedData);
-  }
-}, [items, itemsImage, loading, loadingImage, error, errorImage, lang]);
+ useEffect(() => {
+   if (loading) {
+     return;
+   } else {
+     if (data) {
+       console.log(data);
+     }
+   }
+   if (error) {
+     console.error("Error loading data:", error); // Handle data loading error
+     setFullError("Something wrong happens!");
+     return;
+   }
+ }, [data, loading, error, lang]);
 // Use the 'en' field as the key to ensure uniqueness.
 const categoriesMap = new Map();
-data.forEach((item) => {
+data?.forEach((item) => {
   if (!categoriesMap.has(item.category_en)) {
     categoriesMap.set(item.category_en, {
       en: item.category_en,
@@ -151,7 +130,7 @@ const categoriesArray = Array.from(categoriesMap.values());
           ) : (
             <>
               <div className="w-full  h-[120px] carousel space-x-4 py-5 px-2 ">
-                {categoriesArray.map((item, index) => {
+                {categoriesArray?.map((item, index) => {
                   return (
                     <div
                       key={index}
@@ -299,7 +278,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                         </div>
                       );
                     })
-                  : data.map((item) => {
+                  : data?.map((item) => {
                       return (
                         <div key={item.id}>
                           <div

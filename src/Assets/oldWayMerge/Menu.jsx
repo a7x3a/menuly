@@ -5,14 +5,15 @@ import { CustomScroll } from "react-custom-scroll";
 import { BiSolidDollarCircle } from "react-icons/bi";
 import { MdFeaturedPlayList } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
+import NoIcon from "../Assets/no-image.jpg";
 import { LanguageContext } from "../Context/LanguageContext";
 import { useContext } from "react";
 import { lineWobble } from "ldrs";
-import { ItemsContext } from "../Context/ItemsContext";
 lineWobble.register();
 const Menu = () => {
-  const { loading, error } = readData('/items');
-  const {data, setData} = useContext(ItemsContext)
+  const { itemsImage, loadingImage, errorImage } = readImage("items/");
+  const { items, loading, error } = readData();
+  const [data, setData] = useState([]);
   const [fullError, setFullError] = useState(null);
   const [categoriesSelected, setCategoriesSelected] = useState(null);
   const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
@@ -31,22 +32,43 @@ const Menu = () => {
   };
 
   useEffect(() => {
-    if (loading) {
+    if (loading || loadingImage) {
+      console.log("Loading..."); // Handle loading state
       return;
-    } else {
-      if (data) {
-        console.log(data);
-      }
     }
     if (error) {
       console.error("Error loading data:", error); // Handle data loading error
       setFullError("Something wrong happens!");
       return;
     }
-  }, [data, loading, error, lang]);
+    if (errorImage) {
+      console.error("Error loading images:", errorImage); // Handle image loading error
+      setFullError("Something wrong happens!");
+      return;
+    }
+    if (items && itemsImage) {
+      const [itemsObject] = items;
+      const flattenedData = Object.values(itemsObject);
+      const mergedData = flattenedData.map((item) => {
+        const correspondingImage = itemsImage.find((image) => {
+          const imageNameWithoutExtension = image.name
+            .split(".")
+            .slice(0, -1)
+            .join(".");
+          return imageNameWithoutExtension === item.id;
+        });
+        return {
+          ...item,
+          imageUrl: correspondingImage ? correspondingImage.url : null,
+        };
+      });
+      console.log(mergedData)
+      setData(mergedData);
+    }
+  }, [items, itemsImage, loading, loadingImage, error, errorImage, lang]);
   // Use the 'en' field as the key to ensure uniqueness.
   const categoriesMap = new Map();
-  data?.forEach((item) => {
+  data.forEach((item) => {
     if (!categoriesMap.has(item.category_en)) {
       categoriesMap.set(item.category_en, {
         en: item.category_en,
@@ -71,7 +93,7 @@ const Menu = () => {
       ) : (
         <>
           <div className="w-full  h-[120px] carousel space-x-4 py-5 px-2 ">
-            {categoriesArray?.map((item, index) => {
+            {categoriesArray.map((item, index) => {
               return (
                 <div
                   key={index}
@@ -218,7 +240,7 @@ const Menu = () => {
                     </div>
                   );
                 })
-              : data?.map((item) => {
+              : data.map((item) => {
                   return (
                     <div key={item.id}>
                       <div
