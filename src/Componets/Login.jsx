@@ -32,7 +32,6 @@ const Login = () => {
   }
 
   return (
-
     <div
       className={`w-full  h-[80dvh]  bg-orange-300 flex justify-center flex-col items-center`}
     >
@@ -45,7 +44,7 @@ const Login = () => {
           {lang === "ar" && "!سجل للمتابعە"}
           {lang === "kr" && "!بچۆ ژورەوە بۆ بەردەوام بوون"}
         </h1>
-        <label className="input py-1  input-warning flex items-center gap-2">
+        <label className="input  bg-transparent text-black input-warning flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -58,7 +57,7 @@ const Login = () => {
           <input
             type="text"
             ref={emailRef}
-            className="grow h-full flex items-center pl-1 placeholder:text-sm"
+            className="grow h-full flex  items-center pl-2 ml-1  placeholder:text-sm"
             placeholder={
               (lang === "en" && "Email") ||
               (lang === "ar" && "برید الکترونی") ||
@@ -67,7 +66,7 @@ const Login = () => {
           />
         </label>
 
-        <label className="input input-warning flex items-center gap-2">
+        <label className="input bg-transparent text-black  input-warning flex items-center gap-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -82,7 +81,7 @@ const Login = () => {
           </svg>
           <input
             type="password"
-            className="grow h-full flex items-center pl-1 placeholder:text-sm"
+            className="grow h-full  flex items-center pl-2 ml-1 placeholder:text-sm"
             placeholder={
               (lang === "en" && "Password") ||
               (lang === "ar" && "کلمەسر") ||
@@ -91,7 +90,7 @@ const Login = () => {
             ref={passwordRef}
           />
         </label>
-        <button className="btn group font-light tracking-widest px-20  bg-orange-300 hover:bg-orange-400 text-white">
+        <button className="btn group font-light border-none tracking-widest px-20  bg-orange-300 hover:bg-orange-400 text-white">
           {(lang === "en" && "Login") ||
             (lang === "ar" && "تسجیل دخول") ||
             (lang === "kr" && "چونەژورەوە")}

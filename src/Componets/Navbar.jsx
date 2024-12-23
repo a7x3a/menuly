@@ -46,7 +46,7 @@ const Navbar = () => {
         <div
           tabIndex={0}
           role="button"
-          className="bg-white btn m-2 border-none "
+          className="bg-white hover:bg-white/40 btn m-2 border-none "
         >
           <img src={TranslationIcon} alt="UK Flag" className="w-10" />
         </div>
@@ -60,7 +60,7 @@ const Navbar = () => {
               lang != "en" && setModes("en");
             }}
             role="button"
-            className="bg-white btn border-none "
+            className="bg-white hover:bg-white/40 btn border-none "
           >
             <img src={English} alt="UK Flag" className="w-8" />
           </div>
@@ -69,7 +69,7 @@ const Navbar = () => {
             onClick={() => {
               lang != "ar" && setModes("ar");
             }}
-            className="btn bg-white border-none"
+            className="btn hover:bg-white/40 bg-white border-none"
           >
             <img src={Arabic} alt="UAE Flag" className="w-8" />
           </div>
@@ -77,7 +77,7 @@ const Navbar = () => {
             onClick={() => {
               lang != "kr" && setModes("kr");
             }}
-            className="btn bg-white border-none"
+            className="btn hover:bg-white/40 bg-white border-none"
           >
             <img src={Kurdish} alt="KR Flag" className="w-8" />
           </div>

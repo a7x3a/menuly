@@ -129,7 +129,7 @@ const categoriesArray = Array.from(categoriesMap.values());
             </div>
           ) : (
             <>
-              <div className="w-full  h-[120px] carousel space-x-4 py-5 px-2 ">
+              <div className="w-full text-black  h-[120px] carousel space-x-4 py-5 px-2 ">
                 {categoriesArray?.map((item, index) => {
                   return (
                     <div
@@ -152,7 +152,7 @@ const categoriesArray = Array.from(categoriesMap.values());
                   );
                 })}
               </div>
-              <div className="w-full min-h-fit max-h-fit border-none grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-5 ">
+              <div className="w-full text-black min-h-fit max-h-fit border-none grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-5 ">
                 {categoriesSelected
                   ? categoriesSelectedItems.map((item) => {
                       return (
