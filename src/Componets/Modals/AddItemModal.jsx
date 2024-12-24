@@ -9,6 +9,7 @@ import { LanguageContext } from "../../Context/LanguageContext";
 import { ItemsContext } from "../../Context/ItemsContext";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { BiSolidDollarCircle } from "react-icons/bi";
+import imageCompression from "browser-image-compression";
 
 function AddItemModal() {
   const { lang } = useContext(LanguageContext);
@@ -35,35 +36,55 @@ function AddItemModal() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (file && file.size > 5 * 1024 * 1024) {
       alert("File size must be less than 5MB.");
       return;
     }
-    setImageFile(file);
-  };
 
+    if (file) {
+      try {
+        const options = {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        };
+        const compressedFile = await imageCompression(file, options);
+        setImageFile(compressedFile);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        alert("Error compressing image. Please try again.");
+      }
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     try {
       const itemId = uuidv4();
       let imageUrl = '';
+  
       if (imageFile) {
-        // Upload the provided image to Firebase Storage
+        // Upload the image to Firebase Storage
         const storageRef = ref(storage, `items/${itemId}`);
         await uploadBytes(storageRef, imageFile);
         imageUrl = await getDownloadURL(storageRef);
+  
+        // Force browser to fetch the latest image (cache-busting)
+        imageUrl = `${imageUrl}?alt=media&t=${new Date().getTime()}`;
       } else {
         // Set the default image URL if no image is uploaded
-        const defaultImageRef = ref(storage, "items/no-image.jpg");
+        const defaultImageRef = ref(storage, "items/blank.png");
         imageUrl = await getDownloadURL(defaultImageRef);
+  
+        // Cache-busting for default image
+        imageUrl = `${imageUrl}?alt=media&t=${new Date().getTime()}`;
       }
-      // Reference Firestore collection
-      const itemCollectionRef = RefDB(database, `items/${itemId}`);
-      // Add document to Firestore
-      await set(itemCollectionRef, {
+  
+      // Create the new item
+      const newItem = {
         id: itemId,
         name_en: formData.name_en,
         name_ar: formData.name_ar,
@@ -77,7 +98,16 @@ function AddItemModal() {
         price: Number(formData.price),
         discount: Number(formData.discount || 0),
         imageUrl: imageUrl,
-      });
+      };
+  
+      // Save the new item to Firebase
+      const itemCollectionRef = RefDB(database, `items/${itemId}`);
+      await set(itemCollectionRef, newItem);
+  
+      // Update local state to trigger re-render
+      setData((prevData) => [...prevData, newItem]);
+  
+      // Reset form and state
       setFormData({
         name_en: "",
         name_ar: "",
@@ -90,12 +120,10 @@ function AddItemModal() {
         description_kr: "",
         price: "",
         discount: "",
-        imageUrl: "",
       });
-
       setImageFile(null);
-      const newItem = { id: itemId, imageUrl: imageUrl, ...formData };
-      setData([...data, newItem]);
+  
+      // Close the modal
       document.getElementById("addModal").close();
     } catch (error) {
       console.error("Error adding item:", error);
@@ -104,6 +132,7 @@ function AddItemModal() {
       setLoading(false);
     }
   };
+  
 
   return (
     <div>
@@ -149,8 +178,8 @@ function AddItemModal() {
               lang === "en"
                 ? "English Name"
                 : lang === "ar"
-                ? "الاسم بالإنجليزية"
-                : "ناوی بە ئینگلیزی"
+                  ? "الاسم بالإنجليزية"
+                  : "ناوی بە ئینگلیزی"
             }
             className="input input-bordered w-full"
             value={formData.name_en || ''}
@@ -164,8 +193,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Arabic Name"
                 : lang === "ar"
-                ? "الاسم بالعربية"
-                : "ناوی بە عەرەبی"
+                  ? "الاسم بالعربية"
+                  : "ناوی بە عەرەبی"
             }
             className="input input-bordered w-full"
             value={formData.name_ar || ''}
@@ -179,8 +208,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Kurdish Name"
                 : lang === "ar"
-                ? "الاسم بالكردية"
-                : "ناوی بە کوردی"
+                  ? "الاسم بالكردية"
+                  : "ناوی بە کوردی"
             }
             className="input input-bordered w-full"
             value={formData.name_kr || ''}
@@ -194,8 +223,8 @@ function AddItemModal() {
               lang === "en"
                 ? "English Category"
                 : lang === "ar"
-                ? "الفئة بالإنجليزية"
-                : "هاوپۆلەکان بە ئینگلیزی"
+                  ? "الفئة بالإنجليزية"
+                  : "هاوپۆلەکان بە ئینگلیزی"
             }
             className="input input-bordered w-full"
             value={formData.category_en || ''}
@@ -209,8 +238,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Arabic Category"
                 : lang === "ar"
-                ? "الفئة بالعربية"
-                : "هاوپۆلەکان بە عەرەبی"
+                  ? "الفئة بالعربية"
+                  : "هاوپۆلەکان بە عەرەبی"
             }
             className="input input-bordered w-full"
             value={formData.category_ar || ''}
@@ -224,8 +253,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Kurdish Category"
                 : lang === "ar"
-                ? "الفئة بالكردية"
-                : "هاوپۆلەکان بە کوردی"
+                  ? "الفئة بالكردية"
+                  : "هاوپۆلەکان بە کوردی"
             }
             className="input input-bordered w-full"
             value={formData.category_kr || ''}
@@ -239,8 +268,8 @@ function AddItemModal() {
               lang === "en"
                 ? "English Description"
                 : lang === "ar"
-                ? "الوصف بالإنجليزية"
-                : "وەسف بە ئینگلیزی"
+                  ? "الوصف بالإنجليزية"
+                  : "وەسف بە ئینگلیزی"
             }
             className="input input-bordered w-full"
             value={formData.description_en || ''}
@@ -254,8 +283,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Arabic Description"
                 : lang === "ar"
-                ? "الوصف بالعربية"
-                : "وەسف بە عەرەبی"
+                  ? "الوصف بالعربية"
+                  : "وەسف بە عەرەبی"
             }
             className="input input-bordered w-full"
             value={formData.description_ar || ''}
@@ -269,8 +298,8 @@ function AddItemModal() {
               lang === "en"
                 ? "Kurdish Description"
                 : lang === "ar"
-                ? "الوصف بالكردية"
-                : "وەسف بە کوردی"
+                  ? "الوصف بالكردية"
+                  : "وەسف بە کوردی"
             }
             className="input input-bordered w-full"
             value={formData.description_kr || ''}
@@ -315,7 +344,6 @@ function AddItemModal() {
               className="input input-bordered w-full"
               value={formData.discount || ''}
               onChange={handleInputChange}
-              required
               onInput={(e) => {
                 const value = e.target.value;
                 if (value < 0) {
