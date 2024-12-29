@@ -1,15 +1,16 @@
 // readData.js
-import { ref ,  get } from "firebase/database";
+import { ref, get, remove } from "firebase/database";
 import { database } from "./Config";
-import { useState, useEffect ,useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ref as refStore, listAll, getDownloadURL } from "firebase/storage";
 import { storage } from "./Config";
 import { ItemsContext } from "../Context/ItemsContext";
 // Function to read data from a specific path
 export const readData = (path) => {
-  const {setData} = useContext(ItemsContext)
+  const { setData } = useContext(ItemsContext)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +36,23 @@ export const readData = (path) => {
 
   return { loading, error };
 };
+
+export const deleteItem = async (itemId, setData , setCategoriesSelectedItems) => {
+  const itemRef = ref(database, `items/${itemId}`); // Adjust the path to match your database structure
+
+  remove(itemRef)
+    .then(() => {
+      console.log(`Item with ID ${itemId} deleted successfully.`);
+      // Update the state to remove the deleted item
+      setData((prevItems) => prevItems.filter((item) => item.id !== itemId));
+      setCategoriesSelectedItems &&setCategoriesSelectedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    })
+    .catch((error) => {
+      console.error("Error deleting item:", error);
+    });
+};
+
+
 
 // Fnction to write data to a specific path
 export const writeData = async (path, data) => {
@@ -93,5 +111,5 @@ export const readImage = (path = "items") => {
     }
   }, [path]);
 
-  return { itemsImage, loadingImage, errorImage };
+  return { itemsImage, loadingImage, errorImage, deleteItem };
 };
