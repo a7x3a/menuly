@@ -45,7 +45,7 @@ export const deleteItem = async (itemId, setData , setCategoriesSelectedItems) =
       console.log(`Item with ID ${itemId} deleted successfully.`);
       // Update the state to remove the deleted item
       setData((prevItems) => prevItems.filter((item) => item.id !== itemId));
-      setCategoriesSelectedItems &&setCategoriesSelectedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+      setCategoriesSelectedItems && setCategoriesSelectedItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
     })
     .catch((error) => {
       console.error("Error deleting item:", error);

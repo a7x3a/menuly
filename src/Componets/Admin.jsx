@@ -12,6 +12,8 @@ import { RiDiscountPercentFill } from "react-icons/ri";
 import { LanguageContext } from "../Context/LanguageContext";
 import { ItemsContext } from "../Context/ItemsContext";
 import AddItemModal from "./Modals/AddItemModal";
+import DeleteModal from "./Modals/DeleteModal";
+import UpdateModal from "./Modals/UpdateModal";
 const Admin = () => {
   //Menu JSX
   const { loading, error } = readData("/items");
@@ -154,7 +156,6 @@ const Admin = () => {
                     return (
                       <div key={item.id}>
                         <div
-
                           className="card  bg-white rounded-[30px] transition-all duration-300 !w-full !h-full aspect-square"
                         >
                           <div className="w-full h-full rounded-t-3xl overflow-hidden">
@@ -219,117 +220,9 @@ const Admin = () => {
                           </div>
                         </div>
                         {/**Delete Modal */}
-                        <dialog id={item.id + 'delete'} className="modal">
-                          <CustomScroll
-                            handleClass="m-5"
-                            className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-fit rounded-xl top-0 absolute bg-white p-7 mt-20 "
-                          >
-                            <form method="dialog">
-                              <button className="btn btn-sm  flex justify-center items-center btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
-                                ✕
-                              </button>
-                            </form>
-                            <h3 className="font-semibold text-transparent/60 tracking-wider uppercase text-2xl">
-                              {lang == "en" && item.name_en}
-                              {lang == "ar" && item.name_ar}
-                              {lang == "kr" && item.name_kr}
-                            </h3>
-
-                            <div className="flex flex-col gap-3 p-5">
-                              <span className="text-black text-xl text-center">
-                                {lang == "en" && 'Are you sure you want to delete?'}
-                                {lang == "ar" && 'هل أنت متأكد أنك تريد حذف؟'}
-                                {lang == "kr" && 'دڵنیایت کە دەتەوێت بسڕیتەوە؟'}
-                              </span>
-                              <button href="#" onClick={() => {
-                                deleteItem(item.id, setData, setCategoriesSelectedItems)
-                                setCategoriesSelected(null)
-                                document.getElementById(item.id + 'delete').close()
-                              }
-                              } className="w-full btn btn-error !text-white font-semibold tracking-widest rounded-xl">
-                                {lang == "en" && 'Delete'}
-                                {lang == "ar" && 'حذف'}
-                                {lang == "kr" && 'سڕینەوە'}
-                              </button>
-                              <button href="#" onClick={() =>
-                                document.getElementById(item.id + 'delete').close()
-                              } className="w-full btn btn-success opacity-60 !text-white font-semibold tracking-widest rounded-xl">
-                                {lang == "en" && 'Cancel'}
-                                {lang == "ar" && 'إلغاء'}
-                                {lang == "kr" && 'پاشگەزبوونەوە'}
-                              </button>
-                            </div>
-                          </CustomScroll>
-                        </dialog>
+                        <DeleteModal setCategoriesSelected={setCategoriesSelected} setData={setData} item={item} lang={lang} />
                         {/**Update Modal */}
-                        <dialog id={item.id + 'update'} className="modal">
-                          <CustomScroll
-                            heightRelativeToParent="calc(80% - 40px)"
-                            handleClass="m-5"
-                            className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
-                          >
-                            <form method="dialog">
-                              <button className="btn btn-sm btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
-                                ✕
-                              </button>
-                            </form>
-                            <h3 className="font-semibold text-transparent/60 tracking-wider uppercase text-2xl">
-                              Update Modal
-                              {lang == "en" && item.name_en}
-                              {lang == "ar" && item.name_ar}
-                              {lang == "kr" && item.name_kr}
-                            </h3>
-                            <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full ">
-                              <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
-                                <img
-                                  src={item.imageUrl}
-                                  alt="Item Image"
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div className="pb-4 rounded-2xl p-1">
-                                <span className="py-4 bg-orange-400 flex flex-wrap items-center  gap-3 text-white rounded-2xl px-5 mt-3">
-                                  <MdFeaturedPlayList size={25} />
-                                  {lang == "en" && item.description_en}
-                                  {lang == "ar" && item.description_ar}
-                                  {lang == "kr" && item.description_kr}
-                                </span>
-
-                                <span
-                                  className={`${item.discount && "opacity-30"
-                                    }  py-4 bg-orange-400 text-white rounded-2xl px-5 mt-3 flex justify-between items-center `}
-                                >
-                                  <BiSolidDollarCircle size={25} />
-                                  {item?.discount > 0 ? (
-                                    <span className="line-through">
-                                      {item.price} IQD
-                                    </span>
-                                  ) : (
-                                    item.price + " IQD"
-                                  )}
-                                </span>
-                                {item?.discount > 0 && (
-                                  <>
-                                    <p className="capitalize pt-3 text-center">
-                                      {item.discount}%
-                                      {lang == "en" && "discount"}
-                                      {lang == "ar" && "خصم"}
-                                      {lang == "kr" && "داشکاندن"}
-                                    </p>
-                                    <span className="py-4 bg-green-500 text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
-                                      <RiDiscountPercentFill size={25} />
-                                      <span>
-                                        {item.price -
-                                          item.price * (item.discount / 100)}
-                                        IQD
-                                      </span>
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </CustomScroll>
-                        </dialog>
+                        <UpdateModal setCategoriesSelected={setCategoriesSelected} setData={setData} item={item} lang={lang}/>
                       </div>
                     );
                   })
@@ -337,7 +230,7 @@ const Admin = () => {
                     return (
                       <div key={item.id}>
                         <div
-                          className="card active:scale-90 bg-white rounded-[30px] transition-all duration-300 !w-full !h-full aspect-square"
+                          className="card bg-white rounded-[30px] transition-all duration-300 !w-full !h-full aspect-square"
                         >
                           <div className="w-full h-full rounded-t-3xl overflow-hidden">
                             <img
@@ -400,117 +293,10 @@ const Admin = () => {
                           </div>
                         </div>
                         {/**Delete Modal */}
-                        <dialog id={item.id + 'delete'} className="modal">
-                          <CustomScroll
-                            handleClass="m-5"
-                            className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-fit rounded-xl top-0 absolute bg-white p-7 mt-20 "
-                          >
-                            <form method="dialog">
-                              <button className="btn btn-sm  flex justify-center items-center btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
-                                ✕
-                              </button>
-                            </form>
-                            <h3 className="font-semibold text-transparent/60 tracking-wider uppercase text-2xl">
-                              {lang == "en" && item.name_en}
-                              {lang == "ar" && item.name_ar}
-                              {lang == "kr" && item.name_kr}
-                            </h3>
-
-                            <div className="flex flex-col gap-3 p-5">
-                              <span className="text-black text-xl text-center">
-                                {lang == "en" && 'Are you sure you want to delete?'}
-                                {lang == "ar" && 'هل أنت متأكد أنك تريد حذف؟'}
-                                {lang == "kr" && 'دڵنیایت کە دەتەوێت بسڕیتەوە؟'}
-                              </span>
-                              <button href="#" onClick={() => {
-                                deleteItem(item.id, setData, null)
-                                setCategoriesSelected(null)
-                                document.getElementById(item.id + 'delete').close()
-                              }
-                              } className="w-full btn btn-error !text-white font-semibold tracking-widest rounded-xl">
-                                {lang == "en" && 'Delete'}
-                                {lang == "ar" && 'حذف'}
-                                {lang == "kr" && 'سڕینەوە'}
-                              </button>
-                              <button href="#" onClick={() =>
-                                document.getElementById(item.id + 'delete').close()
-                              } className="w-full btn btn-success opacity-60 !text-white font-semibold tracking-widest rounded-xl">
-                                {lang == "en" && 'Cancel'}
-                                {lang == "ar" && 'إلغاء'}
-                                {lang == "kr" && 'پاشگەزبوونەوە'}
-                              </button>
-                            </div>
-                          </CustomScroll>
-                        </dialog>
+                        <DeleteModal setData={setData} item={item} lang={lang} setCategoriesSelected={setCategoriesSelected} />
                         {/**Update Modal */}
-                        <dialog id={item.id + 'update'} className="modal">
-                          <CustomScroll
-                            heightRelativeToParent="calc(80% - 40px)"
-                            handleClass="m-5"
-                            className="lg:w-1/3 md:3/4 sm:w-3/2  w-3/4  h-full rounded-xl top-0 absolute bg-white p-7 mt-20 "
-                          >
-                            <form method="dialog">
-                              <button className="btn btn-sm btn-circle btn-ghost bg-orange-400 text-white hover:opacity-75 hover:bg-orange-400  absolute right-7  top-7  ">
-                                ✕
-                              </button>
-                            </form>
-                            <h3 className="font-semibold text-transparent/60 tracking-wider uppercase text-2xl">
-                              Update Modal
-                              {lang == "en" && item.name_en}
-                              {lang == "ar" && item.name_ar}
-                              {lang == "kr" && item.name_kr}
-                            </h3>
-                            <div className="w-full px-2 py-6 pb-10 rounded-3xl h-full ">
-                              <div className="rounded-3xl w-full overflow-hidden flex justify-center items-center">
-                                <img
-                                  src={item.imageUrl}
-                                  alt="Item Image"
-                                  className="object-cover"
-                                />
-                              </div>
-                              <div className="pb-4 rounded-2xl p-1">
-                                <span className="py-4 bg-orange-400 flex flex-wrap items-center  gap-3 text-white rounded-2xl px-5 mt-3">
-                                  <MdFeaturedPlayList size={25} />
-                                  {lang == "en" && item.description_en}
-                                  {lang == "ar" && item.description_ar}
-                                  {lang == "kr" && item.description_kr}
-                                </span>
+                        <UpdateModal  setData={setData} item={item} lang={lang} setCategoriesSelected={setCategoriesSelected}/>
 
-                                <span
-                                  className={`${item.discount && "opacity-30"
-                                    }  py-4 bg-orange-400 text-white rounded-2xl px-5 mt-3 flex justify-between items-center `}
-                                >
-                                  <BiSolidDollarCircle size={25} />
-                                  {item?.discount > 0 ? (
-                                    <span className="line-through">
-                                      {item.price} IQD
-                                    </span>
-                                  ) : (
-                                    item.price + " IQD"
-                                  )}
-                                </span>
-                                {item?.discount > 0 && (
-                                  <>
-                                    <p className="capitalize pt-3 text-center">
-                                      {item.discount}%
-                                      {lang == "en" && "discount"}
-                                      {lang == "ar" && "خصم"}
-                                      {lang == "kr" && "داشکاندن"}
-                                    </p>
-                                    <span className="py-4 bg-green-500 text-white rounded-2xl px-5 mt-3 flex justify-between items-center ">
-                                      <RiDiscountPercentFill size={25} />
-                                      <span>
-                                        {item.price -
-                                          item.price * (item.discount / 100)}
-                                        IQD
-                                      </span>
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                          </CustomScroll>
-                        </dialog>
                       </div>
                     );
                   })}
