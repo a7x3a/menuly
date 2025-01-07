@@ -159,7 +159,6 @@ function AddItemModal() {
           <input
             type="file"
             accept="image/*"
-            value={formData.imageUrl || ''}
             onChange={handleImageUpload}
             className="file-input file-input-bordered w-full"
           />

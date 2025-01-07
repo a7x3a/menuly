@@ -222,7 +222,7 @@ const Admin = () => {
                         {/**Delete Modal */}
                         <DeleteModal setCategoriesSelected={setCategoriesSelected} setData={setData} item={item} lang={lang} />
                         {/**Update Modal */}
-                        <UpdateModal setCategoriesSelected={setCategoriesSelected} setData={setData} item={item} lang={lang}/>
+                        <UpdateModal item={item}/>
                       </div>
                     );
                   })
@@ -295,7 +295,7 @@ const Admin = () => {
                         {/**Delete Modal */}
                         <DeleteModal setData={setData} item={item} lang={lang} setCategoriesSelected={setCategoriesSelected} />
                         {/**Update Modal */}
-                        <UpdateModal  setData={setData} item={item} lang={lang} setCategoriesSelected={setCategoriesSelected}/>
+                        <UpdateModal item={item}/>
 
                       </div>
                     );
