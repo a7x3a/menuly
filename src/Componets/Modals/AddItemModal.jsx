@@ -105,7 +105,7 @@ function AddItemModal() {
       await set(itemCollectionRef, newItem);
   
       // Update local state to trigger re-render
-      setData((prevData) => [...prevData, newItem]);
+      setData((prevData) => (Array.isArray(prevData) ? [...prevData, newItem] : [newItem]));
   
       // Reset form and state
       setFormData({

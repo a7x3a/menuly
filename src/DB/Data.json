@@ -1,0 +1,42 @@
+{
+    "items": {
+      "1f7859e5-115e-4eb2-af35-30a4f6257a80": {
+        "category_ar": "حلويات",
+        "category_en": "Desserts",
+        "category_kr": "شیرینی",
+        "description_ar": "تیست",
+        "description_en": "test",
+        "description_kr": "تێست",
+        "discount": 0,
+        "id": "1f7859e5-115e-4eb2-af35-30a4f6257a80",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/qrmenu12.appspot.com/o/items%2F1f7859e5-115e-4eb2-af35-30a4f6257a80?alt=media&token=53961c80-8b06-4009-86af-299619124a16?alt=media&t=1739311831436",
+        "name_ar": "كنافة",
+        "name_en": "Kunafa",
+        "name_kr": "كونافە",
+        "price": 4000
+      },
+      "2be0a442-e880-4ef9-a573-06b2866b2df1": {
+        "category_ar": "مقبلات",
+        "category_en": "Appetizers",
+        "category_kr": "موقەبیلات",
+        "description_ar": "تیست",
+        "description_en": "test",
+        "description_kr": "تێست",
+        "discount": 0,
+        "id": "2be0a442-e880-4ef9-a573-06b2866b2df1",
+        "imageUrl": "https://firebasestorage.googleapis.com/v0/b/qrmenu12.appspot.com/o/items%2F2be0a442-e880-4ef9-a573-06b2866b2df1?alt=media&token=52147aeb-360c-47b3-ab46-29ec0b59b5e1?alt=media&t=1739311878189",
+        "name_ar": "بابا غنوج",
+        "name_en": "Baba Ganoush",
+        "name_kr": " بابا غنج",
+        "price": 3000
+      }
+    
+    },
+    "profile 'not used yet' ": {
+      "discount_all": 0,
+      "events": {
+        "event1": "null"
+      },
+      "title": "Resturanat Name"
+    }
+  }

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { database, storage } from "../../DB/Config";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { ref as RefDB, set } from "firebase/database";
@@ -76,6 +75,7 @@ const UpdateModal = ({item}) => {
   
       // Create the updated item
       const updatedItem = {
+        id: item.id,
         name_en: formData.name_en,
         name_ar: formData.name_ar,
         name_kr: formData.name_kr,

@@ -4,10 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import { deleteItem, readData, readImage } from "../DB/Firebase";
-import { CustomScroll } from "react-custom-scroll";
-import { BiSolidDollarCircle } from "react-icons/bi";
-import { MdFeaturedPlayList } from "react-icons/md";
+import {  readData } from "../DB/Firebase";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { LanguageContext } from "../Context/LanguageContext";
 import { ItemsContext } from "../Context/ItemsContext";
@@ -17,7 +14,7 @@ import UpdateModal from "./Modals/UpdateModal";
 const Admin = () => {
   //Menu JSX
   const { loading, error } = readData("/items");
-  const { data, setData } = useContext(ItemsContext);
+  const { data = [], setData } = useContext(ItemsContext);
   const [fullError, setFullError] = useState(null);
   const [categoriesSelected, setCategoriesSelected] = useState(null);
   const [categoriesSelectedItems, setCategoriesSelectedItems] = useState(null);
