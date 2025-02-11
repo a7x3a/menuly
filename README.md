@@ -22,7 +22,5 @@ To get started with Menuly, follow these steps:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/menuly.git
-
-
+   git clone https://github.com/a7x3a/menuly.git
 - **Remaining Error handling intf
