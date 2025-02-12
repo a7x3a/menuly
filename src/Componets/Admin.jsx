@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { auth } from "../DB/Config";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { RiLogoutCircleLine } from "react-icons/ri";
-import {  readData } from "../DB/Firebase";
+import { readData } from "../DB/Firebase";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { LanguageContext } from "../Context/LanguageContext";
 import { ItemsContext } from "../Context/ItemsContext";
 import AddItemModal from "./Modals/AddItemModal";
 import DeleteModal from "./Modals/DeleteModal";
 import UpdateModal from "./Modals/UpdateModal";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 const Admin = () => {
   //Menu JSX
   const { loading, error } = readData("/items");
@@ -77,11 +78,40 @@ const Admin = () => {
     auth.signOut();
     navigate("/login");
   };
+  //Carousel Controller
+  const [dragging, setDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+  const carouselRef = useRef(null);
+
+  const handleMouseDown = (e) => {
+    setDragging(true);
+    setStartX(e.clientX);
+    setScrollLeft(carouselRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!dragging) return;
+    const moveX = e.clientX - startX;
+    carouselRef.current.scrollLeft = scrollLeft - moveX;
+  };
+
+  const handleMouseUp = () => {
+    setDragging(false);
+  };
+
+  const handleNext = () => {
+    carouselRef.current.scrollLeft += 200; // Adjust the value as needed
+  };
+
+  const handlePrev = () => {
+    carouselRef.current.scrollLeft -= 200; // Adjust the value as needed
+  };
 
   return (
     <div
       className={`w-full ${data ? "h-fit" : "h-[80dvh]"
-        }  bg-orange-300 flex flex-col items-center p-6`}
+        }  bg-orange-300  flex flex-col items-center p-6`}
     >
       {user ? (
         <div className="w-full flex flex-col gap-3">
@@ -124,7 +154,12 @@ const Admin = () => {
           ) : (
             <>
               {/*Categories*/}
-              <div className="w-full text-black  h-[120px] carousel space-x-4 py-5 px-2 ">
+              <div ref={carouselRef}
+                className="w-full  h-[120px] carousel text-black space-x-4 py-5 px-5 overflow-x-auto"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}>
                 {categoriesArray?.map((item, index) => {
                   return (
                     <div
@@ -133,10 +168,10 @@ const Admin = () => {
                         setCategory(item.en);
                       }}
                       className={`card ${item.en == categoriesSelected && "opacity-30"
-                        } active:scale-90 bg-white carousel-item  p-5 rounded-[15px] transition-all duration-300 w-1/6 aspect-square `}
+                        } active:scale-90 bg-white carousel-item  p-5 rounded-[15px] transition-all duration-300 w-fit sm:w-1/6   `}
                     >
-                      <div className="flex gap-4 justify-center items-center h-full">
-                        <p className="text-sm font-bold opacity-75 uppercase tracking-wider">
+                      <div className="flex  gap-4 justify-center items-center h-full">
+                        <p className="text-xs sm:text-sm text-center  font-bold opacity-75 uppercase tracking-wider">
                           {lang == "en" && item.en}
                           {lang == "ar" && item.ar}
                           {lang == "kr" && item.kr}
@@ -145,9 +180,22 @@ const Admin = () => {
                     </div>
                   );
                 })}
+                {/* Prev and Next Buttons */}
+                <button
+                  onClick={handlePrev}
+                  className="absolute left-[-13px] self-center  bg-orange-400 text-white p-2 rounded-full"
+                >
+                  <GrFormPrevious size={20} />
+                </button>
+                <button
+                  onClick={handleNext}
+                  className="absolute right-3 self-center  bg-orange-400 text-white p-2 rounded-full"
+                >
+                  <GrFormNext size={20} />
+                </button>
               </div>
               {/*Categories Selection*/}
-              <div className="w-full text-black min-h-fit max-h-fit border-none grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1   gap-5 ">
+              <div className="w-full text-black min-h-fit max-h-fit border-none grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2 grid-cols-1   gap-5 ">
                 {categoriesSelected
                   ? categoriesSelectedItems.map((item) => {
                     return (
@@ -219,7 +267,7 @@ const Admin = () => {
                         {/**Delete Modal */}
                         <DeleteModal setCategoriesSelected={setCategoriesSelected} setData={setData} item={item} lang={lang} />
                         {/**Update Modal */}
-                        <UpdateModal item={item}/>
+                        <UpdateModal item={item} />
                       </div>
                     );
                   })
@@ -292,7 +340,7 @@ const Admin = () => {
                         {/**Delete Modal */}
                         <DeleteModal setData={setData} item={item} lang={lang} setCategoriesSelected={setCategoriesSelected} />
                         {/**Update Modal */}
-                        <UpdateModal item={item}/>
+                        <UpdateModal item={item} />
 
                       </div>
                     );
