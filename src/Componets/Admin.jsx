@@ -4,6 +4,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { RiLogoutCircleLine } from "react-icons/ri";
+import { IoQrCodeOutline } from "react-icons/io5";
 import { readData } from "../DB/Firebase";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { LanguageContext } from "../Context/LanguageContext";
@@ -12,6 +13,7 @@ import AddItemModal from "./Modals/AddItemModal";
 import DeleteModal from "./Modals/DeleteModal";
 import UpdateModal from "./Modals/UpdateModal";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import QrModal from "./Modals/QrModal";
 const Admin = () => {
   //Menu JSX
   const { loading, error } = readData("/items");
@@ -129,14 +131,24 @@ const Admin = () => {
                 {lang === "ar" && `مرحبا - ${user.email}`}
                 {lang === "kr" && `بەخێربێیت - ${user.email}`}
               </h2>
+              <div className="flex gap-2">
+              <button
+                className="btn btn-info w-fit hover:scale-[97%] text-white hover:bg-blue-500"
+                onClick={()=>{document.getElementById("qrModal").showModal()}}
+              >
+                <IoQrCodeOutline size={20} />
+              </button>
               <button
                 className="btn btn-error w-fit hover:scale-[97%] text-white hover:bg-red-500"
                 onClick={handleLogout}
               >
                 <RiLogoutCircleLine size={20} />
               </button>
+              </div>
             </div>
           </div>
+          {/**Qr Code generator */}
+          <QrModal />
           {/**Add Items */}
           <AddItemModal />
 
