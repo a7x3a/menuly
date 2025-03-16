@@ -19,12 +19,11 @@ const Navbar = () => {
       itemsImage.map((item) => {
         if (item.name === "nav.png") {
           setNavImageUrl(item.url);
-          console.log(navImageUrl);
         }
       });
     }
     if (errorImage) {
-      console.log("Error Image Profiler.");
+      //set error here
     }
   }, [itemsImage]);
   const setModes = (lang) =>{
