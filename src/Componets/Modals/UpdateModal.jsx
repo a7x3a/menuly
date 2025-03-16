@@ -115,9 +115,8 @@ const UpdateModal = ({item}) => {
   };
   
   return (
-                     <dialog id={item.id + 'update'} className="modal  text-white/60">
+                     <dialog id={item.id + 'update'} className="modal">
                                 <form method="dialog">
-                                 
                                 </form>
                                 <form onSubmit={handleSubmit} className="modal-box  grid gap-5">
                                          <h3 className="text-lg font-bold">Update Item</h3>
