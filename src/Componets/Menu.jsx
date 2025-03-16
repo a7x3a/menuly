@@ -35,10 +35,6 @@ const Menu = () => {
   useEffect(() => {
     if (loading) {
       return;
-    } else {
-      if (data) {
-        console.log(data);
-      }
     }
     if (error) {
       console.error("Error loading data:", error); // Handle data loading error
